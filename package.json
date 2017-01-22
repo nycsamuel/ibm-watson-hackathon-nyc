@@ -1,0 +1,17 @@
+{
+  "name": "ibm-watson-hackathon",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.13.x",
+    "node-fetch": "^1.6.3",
+    "request": "^2.74.0"
+  },
+  "repository": {},
+  "engines": {
+    "node": "4.x"
+  }
+}
