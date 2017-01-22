@@ -90,7 +90,7 @@ app.post("/webhook_callback", function(req, res) {
   const spaceId = body.spaceId;
 
   var msgTitle = "Watson says:";
-  var msgText = "You sound ";
+  var msgText = "";
   var memberName = "";
   var memberId = "";
   var msgQuote = '';
@@ -142,13 +142,14 @@ app.post("/webhook_callback", function(req, res) {
       var giphyURL = data.data.image_original_url;
       msgGiphy = giphyURL;
 
-      if (docSentiment.type === "negative" && docSentiment.score < -0.50) {
-        msgText = "sad. Here's a quote to cheer you up: ";
-      } else if (docSentiment.type === "positive" && docSentiment.score > 0.50) {
-        msgText = "happy. Here's a quote to keep you happy: ";
+      if (docSentiment.type === "negative" && docSentiment.score < -0.70) {
+        msgText = "You seem sad. Here's a quote to cheer you up: ";
+      } else if (docSentiment.type === "positive" && docSentiment.score > 0.70) {
+        msgText = "You seem happy. Here's a quote to keep you happy: ";
       } else {
         // If the person is neither happy nor sad then assume neutral and just return
-        msgText = "neither happy nor sad. Here's a quote to improve your mood: ";
+        // msgText = "neither happy nor sad. Here's a quote to improve your mood: ";
+        msgText = 'neutral';
       }
 
       
@@ -216,7 +217,13 @@ app.post("/webhook_callback", function(req, res) {
 					memberId = person.id;
           memberName = person.displayName;
           // msgText = memberName + msgText;
-          msgText = `${msgText} ${msgQuote} - and here's a funny gif for you. ${msgGiphy}`;
+
+          if (msgText === 'neutral') {
+            return;
+          } else {
+            msgText = `${msgText} ${msgQuote} - and here's a funny gif for you. ${msgGiphy}`;
+          }
+
       } else {
           console.log("ERROR: Can't retrieve " + GraphQLOptions.body + " status:" + response.statusCode);
           return;
